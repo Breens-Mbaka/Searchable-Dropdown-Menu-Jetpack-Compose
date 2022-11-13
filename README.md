@@ -3,7 +3,7 @@
 This is a simple Android Library to help you create a dropdown that is searchable in Jetpack Compose.
 
 ## How to include it into your project
-### Add it in your root build.gradle at the end of repositories:
+### Step 1. Add it in your root build.gradle at the end of repositories:
 ```gradle
 allprojects {
     repositories {
@@ -13,7 +13,7 @@ allprojects {
 }
 ```
 
-### Add the dependency
+### Step 2. Add the dependency
 ```gradle
 dependencies {
     implementation 'com.github.Breens-Mbaka:Searchable-Dropdown-Menu-Jetpack-Compose:0.1.0-beta01'
