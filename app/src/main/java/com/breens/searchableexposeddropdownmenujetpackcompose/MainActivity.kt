@@ -1,6 +1,7 @@
 package com.breens.searchableexposeddropdownmenujetpackcompose
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
@@ -10,15 +11,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconToggleButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldColors
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,9 +35,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.breens.searchableexposeddropdownmenujetpackcompose.ui.theme.SearchableExposedDropDownMenuJetpackComposeTheme
@@ -45,7 +53,41 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .padding(16.dp)
                 ) {
-                    SearchableExpandedDropDownMenu()
+
+                    val sports =
+                        mutableListOf(
+                            "Basketball",
+                            "Rugby",
+                            "Football",
+                            "MMA",
+                            "Motorsport",
+                            "Snooker",
+                            "Tennis",
+                            "Tennis",
+                            "Tennis",
+                            "Tennis",
+                            "Tennis",
+                            "Tennis",
+                            "Tennis",
+                            "Tennis",
+                            "Tennis",
+                            "Tennis",
+                            "Tennis",
+                            "Tennis",
+                            "Tennis",
+                            "Tennis",
+                            "Tennis",
+                            "Tennis",
+                            "Tennis",
+                            "Tennis",
+                        )
+                    SearchableExpandedDropDownMenu(
+                        listOfItems = sports,
+                        modifier = Modifier.fillMaxWidth(),
+                        onDropDownItemSelected = { item ->
+                            Toast.makeText(applicationContext, item, Toast.LENGTH_SHORT).show()
+                        }
+                    )
                 }
             }
         }
@@ -53,91 +95,108 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-@Preview(showSystemUi = true)
-fun SearchableExpandedDropDownMenu() {
+fun SearchableExpandedDropDownMenu(
+    modifier: Modifier = Modifier,
+    listOfItems: List<String>,
+    enable: Boolean = false,
+    placeholder: String = "Select Option",
+    openedIcon: ImageVector = Icons.Outlined.KeyboardArrowUp,
+    closedIcon: ImageVector = Icons.Outlined.KeyboardArrowDown,
+    parentTextFieldCornerRadius: Dp = 12.dp,
+    colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors(),
+    onDropDownItemSelected: (String) -> Unit = {}
+) {
 
     var selectedOptionText by rememberSaveable { mutableStateOf("") }
-
     var searchedOption by rememberSaveable { mutableStateOf("") }
-
     var expanded by remember { mutableStateOf(false) }
+    var filteredItems = mutableListOf<String>()
+    var parentTextFieldSize by remember { mutableStateOf(Size.Zero) }
 
-    val sports =
-        mutableListOf("Basketball", "Rugby", "Football", "MMA", "Motorsport", "Snooker", "Tennis")
-
-    var filteredSports = mutableListOf<String>()
-
-    var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
-
-    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = modifier
                 .onGloballyPositioned { coordinates ->
-                    mTextFieldSize = coordinates.size.toSize()
+                    parentTextFieldSize = coordinates.size.toSize()
                 }
                 .clickable {
                     expanded = !expanded
                 },
+            colors = colors,
             value = selectedOptionText,
-            enabled = false,
+            enabled = enable,
             onValueChange = { selectedOptionText = it },
-            placeholder = { Text(text = "Select Option") },
+            placeholder = {
+                Text(text = placeholder)
+            },
             trailingIcon = {
-                IconToggleButton(checked = expanded, onCheckedChange = { expanded = it }) {
+                IconToggleButton(
+                    checked = expanded,
+                    onCheckedChange = {
+                        expanded = it
+                    }
+                ) {
                     if (expanded) Icon(
-                        imageVector = Icons.Outlined.KeyboardArrowUp,
+                        imageVector = openedIcon,
                         contentDescription = null
                     ) else Icon(
-                        imageVector = Icons.Outlined.KeyboardArrowDown,
+                        imageVector = closedIcon,
                         contentDescription = null
                     )
                 }
-            }
+            },
+            shape = RoundedCornerShape(parentTextFieldCornerRadius)
         )
         if (expanded) {
-            Card(modifier = Modifier.width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })) {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Card(
+                modifier = modifier.width(with(LocalDensity.current) {
+                    parentTextFieldSize.width.toDp()
+                })
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
                     OutlinedTextField(
-                        modifier = Modifier
+                        modifier = modifier
                             .fillMaxWidth()
                             .padding(16.dp),
                         value = searchedOption,
                         onValueChange = { selectedSport ->
                             searchedOption = selectedSport
-                            filteredSports = sports.filter {
+                            filteredItems = listOfItems.filter {
                                 it.contains(
                                     searchedOption,
                                     ignoreCase = true
                                 )
-                            } as MutableList<String>
+                            }.toMutableList()
+                        },
+                        leadingIcon = {
+                            Icon(imageVector = Icons.Outlined.Search, contentDescription = null)
+                        },
+                        placeholder = {
+                            Text(text = "Search")
                         }
                     )
 
-                    if (filteredSports.isNotEmpty()) {
-                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            filteredSports.forEach { selectionOption ->
-                                DropdownMenuItem(
-                                    onClick = {
-                                        selectedOptionText = selectionOption
-                                        expanded = false
-                                    }
-                                ) {
-                                    Text(text = selectionOption)
-                                }
-                            }
-                        }
+                    val items = if (filteredItems.isEmpty()) {
+                        listOfItems
                     } else {
-                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            sports.forEach { selectionOption ->
-                                DropdownMenuItem(
-                                    onClick = {
-                                        selectedOptionText = selectionOption
-                                        expanded = false
-                                    }
-                                ) {
-                                    Text(text = selectionOption)
+                        filteredItems
+                    }
+
+                    LazyColumn {
+                        items(items) { selectedItem ->
+                            DropdownMenuItem(
+                                onClick = {
+                                    selectedOptionText = selectedItem
+                                    onDropDownItemSelected(selectedItem)
+                                    expanded = false
                                 }
+                            ) {
+                                Text(text = selectedItem)
                             }
                         }
                     }
