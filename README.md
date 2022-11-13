@@ -2,8 +2,8 @@
 
 This is a simple Android Library to help you create a dropdown that is searchable in Jetpack Compose.
 
-## How to include it into your project
-### Step 1. Add it in your root build.gradle at the end of repositories:
+# How to include it into your project
+## Step 1. Add it in your root build.gradle at the end of repositories:
 ```gradle
 allprojects {
     repositories {
@@ -13,14 +13,14 @@ allprojects {
 }
 ```
 
-### Step 2. Add the dependency
+## Step 2. Add the dependency
 ```gradle
 dependencies {
     implementation 'com.github.Breens-Mbaka:Searchable-Dropdown-Menu-Jetpack-Compose:0.1.0-beta01'
 }
 ```
 
-## Usage
+# Usage
 ``` Kotlin
 val sports = mutableListOf(
     "Basketball",
@@ -41,6 +41,7 @@ onDropDownItemSelected = {
 )
 ```
 
+# License
 ```
 Copyright 2022 Breens-Mbaka
 
