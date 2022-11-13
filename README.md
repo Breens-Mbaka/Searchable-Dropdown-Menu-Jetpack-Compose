@@ -22,15 +22,8 @@ dependencies {
 
 # Usage
 ``` Kotlin
-val sports = mutableListOf(
-    "Basketball",
-    "Rugby",
-    "Football",
-    "MMA",
-    "Motorsport",
-    "Snooker",
-    "Tennis",
-)
+val sports = mutableListOf("Basketball", "Rugby", "Football", "MMA", "Motorsport", "Snooker", "Tennis")
+
 SearchableExpandedDropDownMenu(
 listOfItems = sports,
 modifier = Modifier.fillMaxWidth(),
