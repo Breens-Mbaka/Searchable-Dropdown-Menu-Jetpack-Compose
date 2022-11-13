@@ -3,11 +3,12 @@ package com.breens.searchableexposeddropdownmenujetpackcompose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Card
 import androidx.compose.material.DropdownMenuItem
@@ -26,8 +27,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
 import com.breens.searchableexposeddropdownmenujetpackcompose.ui.theme.SearchableExposedDropDownMenuJetpackComposeTheme
 
 class MainActivity : ComponentActivity() {
@@ -35,7 +40,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SearchableExposedDropDownMenuJetpackComposeTheme {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Column(
+                    Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
                     SearchableExpandedDropDownMenu()
                 }
             }
@@ -58,10 +67,20 @@ fun SearchableExpandedDropDownMenu() {
 
     var filteredSports = mutableListOf<String>()
 
+    var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
+
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .onGloballyPositioned { coordinates ->
+                    mTextFieldSize = coordinates.size.toSize()
+                }
+                .clickable {
+                    expanded = !expanded
+                },
             value = selectedOptionText,
-            readOnly = true,
+            enabled = false,
             onValueChange = { selectedOptionText = it },
             placeholder = { Text(text = "Select Option") },
             trailingIcon = {
@@ -77,9 +96,12 @@ fun SearchableExpandedDropDownMenu() {
             }
         )
         if (expanded) {
-            Card(modifier = Modifier.width(280.dp)) {
+            Card(modifier = Modifier.width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })) {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
                         value = searchedOption,
                         onValueChange = { selectedSport ->
                             searchedOption = selectedSport
