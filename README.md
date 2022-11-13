@@ -41,6 +41,7 @@ onDropDownItemSelected = {
 )
 ```
 
+```
 Copyright 2022 Breens-Mbaka
 
 Licensed under the Apache License, Version 2.0 (the "License");
