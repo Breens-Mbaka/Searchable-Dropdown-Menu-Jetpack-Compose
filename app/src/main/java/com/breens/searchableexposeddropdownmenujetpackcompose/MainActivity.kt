@@ -61,8 +61,9 @@ fun SearchableExpandedDropDownMenu() {
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         OutlinedTextField(
             value = selectedOptionText,
+            readOnly = true,
             onValueChange = { selectedOptionText = it },
-            label = { Text(text = "Select Option") },
+            placeholder = { Text(text = "Select Option") },
             trailingIcon = {
                 IconToggleButton(checked = expanded, onCheckedChange = { expanded = it }) {
                     if (expanded) Icon(
@@ -75,7 +76,6 @@ fun SearchableExpandedDropDownMenu() {
                 }
             }
         )
-
         if (expanded) {
             Card(modifier = Modifier.width(280.dp)) {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -83,7 +83,12 @@ fun SearchableExpandedDropDownMenu() {
                         value = searchedOption,
                         onValueChange = { selectedSport ->
                             searchedOption = selectedSport
-                            filteredSports = sports.filter { it.contains(searchedOption, ignoreCase = true) } as MutableList<String>
+                            filteredSports = sports.filter {
+                                it.contains(
+                                    searchedOption,
+                                    ignoreCase = true
+                                )
+                            } as MutableList<String>
                         }
                     )
 
