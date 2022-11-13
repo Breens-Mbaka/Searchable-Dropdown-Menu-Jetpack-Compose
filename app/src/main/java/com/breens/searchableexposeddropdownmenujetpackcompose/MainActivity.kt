@@ -1,6 +1,7 @@
 package com.breens.searchableexposeddropdownmenujetpackcompose
 
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -42,6 +43,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.breens.searchableexposeddropdownmenujetpackcompose.ui.theme.SearchableExposedDropDownMenuJetpackComposeTheme
+import com.kanyidev.searchable_dropdown.SearchableExpandedDropDownMenu
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,118 +90,6 @@ class MainActivity : ComponentActivity() {
                             Toast.makeText(applicationContext, item, Toast.LENGTH_SHORT).show()
                         }
                     )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun SearchableExpandedDropDownMenu(
-    modifier: Modifier = Modifier,
-    listOfItems: List<String>,
-    enable: Boolean = false,
-    placeholder: String = "Select Option",
-    openedIcon: ImageVector = Icons.Outlined.KeyboardArrowUp,
-    closedIcon: ImageVector = Icons.Outlined.KeyboardArrowDown,
-    parentTextFieldCornerRadius: Dp = 12.dp,
-    colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors(),
-    onDropDownItemSelected: (String) -> Unit = {}
-) {
-
-    var selectedOptionText by rememberSaveable { mutableStateOf("") }
-    var searchedOption by rememberSaveable { mutableStateOf("") }
-    var expanded by remember { mutableStateOf(false) }
-    var filteredItems = mutableListOf<String>()
-    var parentTextFieldSize by remember { mutableStateOf(Size.Zero) }
-
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        OutlinedTextField(
-            modifier = modifier
-                .onGloballyPositioned { coordinates ->
-                    parentTextFieldSize = coordinates.size.toSize()
-                }
-                .clickable {
-                    expanded = !expanded
-                },
-            colors = colors,
-            value = selectedOptionText,
-            enabled = enable,
-            onValueChange = { selectedOptionText = it },
-            placeholder = {
-                Text(text = placeholder)
-            },
-            trailingIcon = {
-                IconToggleButton(
-                    checked = expanded,
-                    onCheckedChange = {
-                        expanded = it
-                    }
-                ) {
-                    if (expanded) Icon(
-                        imageVector = openedIcon,
-                        contentDescription = null
-                    ) else Icon(
-                        imageVector = closedIcon,
-                        contentDescription = null
-                    )
-                }
-            },
-            shape = RoundedCornerShape(parentTextFieldCornerRadius)
-        )
-        if (expanded) {
-            Card(
-                modifier = modifier.width(with(LocalDensity.current) {
-                    parentTextFieldSize.width.toDp()
-                })
-            ) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    OutlinedTextField(
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        value = searchedOption,
-                        onValueChange = { selectedSport ->
-                            searchedOption = selectedSport
-                            filteredItems = listOfItems.filter {
-                                it.contains(
-                                    searchedOption,
-                                    ignoreCase = true
-                                )
-                            }.toMutableList()
-                        },
-                        leadingIcon = {
-                            Icon(imageVector = Icons.Outlined.Search, contentDescription = null)
-                        },
-                        placeholder = {
-                            Text(text = "Search")
-                        }
-                    )
-
-                    val items = if (filteredItems.isEmpty()) {
-                        listOfItems
-                    } else {
-                        filteredItems
-                    }
-
-                    LazyColumn {
-                        items(items) { selectedItem ->
-                            DropdownMenuItem(
-                                onClick = {
-                                    selectedOptionText = selectedItem
-                                    onDropDownItemSelected(selectedItem)
-                                    expanded = false
-                                }
-                            ) {
-                                Text(text = selectedItem)
-                            }
-                        }
-                    }
                 }
             }
         }
