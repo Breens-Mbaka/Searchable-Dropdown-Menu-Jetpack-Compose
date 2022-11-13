@@ -34,6 +34,9 @@ onDropDownItemSelected = {
 )
 ```
 
+# Demo
+https://user-images.githubusercontent.com/72180010/201535016-671bbebe-a030-42c6-b8b0-627ce4d2874d.mov
+
 # License
 ```
 Copyright 2022 Breens-Mbaka
