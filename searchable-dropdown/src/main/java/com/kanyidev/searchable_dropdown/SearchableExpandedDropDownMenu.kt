@@ -136,6 +136,7 @@ fun SearchableExpandedDropDownMenu(
                                 onClick = {
                                     selectedOptionText = selectedItem
                                     onDropDownItemSelected(selectedItem)
+                                    searchedOption = ""
                                     expanded = false
                                 }
                             ) {
