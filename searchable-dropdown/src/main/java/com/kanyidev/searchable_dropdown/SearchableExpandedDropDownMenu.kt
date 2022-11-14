@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.DropdownMenuItem
@@ -38,22 +36,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 
 @Composable
-fun SearchableExpandedDropDownMenu(
+fun <T> SearchableExpandedDropDownMenu(
     modifier: Modifier = Modifier,
-    listOfItems: List<String>,
+    listOfItems: List<T>,
     enable: Boolean = false,
     placeholder: String = "Select Option",
     openedIcon: ImageVector = Icons.Outlined.KeyboardArrowUp,
     closedIcon: ImageVector = Icons.Outlined.KeyboardArrowDown,
     parentTextFieldCornerRadius: Dp = 12.dp,
     colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors(),
-    onDropDownItemSelected: (String) -> Unit = {}
+    onDropDownItemSelected: (T) -> Unit = {},
+    dropdownItem: @Composable (T) -> Unit
 ) {
-
     var selectedOptionText by rememberSaveable { mutableStateOf("") }
     var searchedOption by rememberSaveable { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
-    var filteredItems = mutableListOf<String>()
+    var filteredItems = mutableListOf<T>()
     var parentTextFieldSize by remember { mutableStateOf(Size.Zero) }
 
     Column(
@@ -95,9 +93,11 @@ fun SearchableExpandedDropDownMenu(
         )
         if (expanded) {
             Card(
-                modifier = modifier.width(with(LocalDensity.current) {
-                    parentTextFieldSize.width.toDp()
-                })
+                modifier = modifier.width(
+                    with(LocalDensity.current) {
+                        parentTextFieldSize.width.toDp()
+                    }
+                )
             ) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -110,7 +110,7 @@ fun SearchableExpandedDropDownMenu(
                         onValueChange = { selectedSport ->
                             searchedOption = selectedSport
                             filteredItems = listOfItems.filter {
-                                it.contains(
+                                it.toString().contains(
                                     searchedOption,
                                     ignoreCase = true
                                 )
@@ -130,18 +130,16 @@ fun SearchableExpandedDropDownMenu(
                         filteredItems
                     }
 
-                    LazyColumn {
-                        items(items) { selectedItem ->
-                            DropdownMenuItem(
-                                onClick = {
-                                    selectedOptionText = selectedItem
-                                    onDropDownItemSelected(selectedItem)
-                                    searchedOption = ""
-                                    expanded = false
-                                }
-                            ) {
-                                Text(text = selectedItem)
+                    items.forEach { selectedItem ->
+                        DropdownMenuItem(
+                            onClick = {
+                                selectedOptionText = selectedItem.toString()
+                                onDropDownItemSelected(selectedItem)
+                                searchedOption = ""
+                                expanded = false
                             }
+                        ) {
+                            dropdownItem(selectedItem)
                         }
                     }
                 }
