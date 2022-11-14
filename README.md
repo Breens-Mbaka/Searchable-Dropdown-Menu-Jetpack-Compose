@@ -10,7 +10,7 @@
 </p> <br>
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/72180010/201576619-b55118ba-9510-49ea-9110-0bcbe025d7a7.gif" width="280"/>
+<img src="https://user-images.githubusercontent.com/72180010/201577423-b5b12963-e15f-4cf2-9687-1ce08199e2a1.gif" width="280"/>
 </p>
 
 # How to include it into your project
