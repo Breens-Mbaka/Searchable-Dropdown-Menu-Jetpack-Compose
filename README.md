@@ -27,7 +27,7 @@ allprojects {
 ## Step 2. Add the dependency
 ```gradle
 dependencies {
-    implementation 'com.github.Breens-Mbaka:Searchable-Dropdown-Menu-Jetpack-Compose:0.1.0-beta01'
+    implementation 'com.github.Breens-Mbaka:Searchable-Dropdown-Menu-Jetpack-Compose:0.1.1-beta01'
 }
 ```
 
