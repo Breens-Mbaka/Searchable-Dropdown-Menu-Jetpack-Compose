@@ -1,9 +1,9 @@
 # Searchable-Dropdown-Menu-Jetpack-Compose
 
-This is a simple Android Library to help you create a dropdown that is searchable in Jetpack Compose.
+This is a simple Android Library to help you create a dropdown that is searchable in Jetpack Compose
 
 # How to include it into your project
-## Step 1. Add it in your root build.gradle at the end of repositories:
+## Step 1. Add it in your root `build.gradle` at the end of repositories:
 ```gradle
 allprojects {
     repositories {
@@ -25,12 +25,17 @@ dependencies {
 val sports = mutableListOf("Basketball", "Rugby", "Football", "MMA", "Motorsport", "Snooker", "Tennis")
 
 SearchableExpandedDropDownMenu(
-listOfItems = sports,
+listOfItems = sports // provide the list of items you want to be populated in the dropdown,
 modifier = Modifier.fillMaxWidth(),
-onDropDownItemSelected = {
-    item ->
+onDropDownItemSelected = { item -> // Returns the item selected in the dropdown
     Toast.makeText(applicationContext, item, Toast.LENGTH_SHORT).show()
-    }
+    },
+placeholder = "Select option" // Add your preferres placeholder name,
+openedIcon = // Add your preffered icon when the dropdown is opened,
+closedIcon = // Add your preffered icon when the dropdown is closed,
+parentTextFieldCornerRadius = // By default the corner radius is 12.dp but you customize it,
+colors = // Customize the colors of the input text, background and content used in a text field in different states,
+
 )
 ```
 
