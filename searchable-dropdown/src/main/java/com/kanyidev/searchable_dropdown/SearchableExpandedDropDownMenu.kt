@@ -36,22 +36,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 
 @Composable
-fun SearchableExpandedDropDownMenu(
+fun <T> SearchableExpandedDropDownMenu(
     modifier: Modifier = Modifier,
-    listOfItems: List<String>,
+    listOfItems: List<T>,
     enable: Boolean = false,
     placeholder: String = "Select Option",
     openedIcon: ImageVector = Icons.Outlined.KeyboardArrowUp,
     closedIcon: ImageVector = Icons.Outlined.KeyboardArrowDown,
     parentTextFieldCornerRadius: Dp = 12.dp,
     colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors(),
-    onDropDownItemSelected: (String) -> Unit = {}
+    onDropDownItemSelected: (T) -> Unit = {},
+    dropdownItem: @Composable (T) -> Unit
 ) {
-
     var selectedOptionText by rememberSaveable { mutableStateOf("") }
     var searchedOption by rememberSaveable { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
-    var filteredItems = mutableListOf<String>()
+    var filteredItems = mutableListOf<T>()
     var parentTextFieldSize by remember { mutableStateOf(Size.Zero) }
 
     Column(
@@ -93,9 +93,11 @@ fun SearchableExpandedDropDownMenu(
         )
         if (expanded) {
             Card(
-                modifier = modifier.width(with(LocalDensity.current) {
-                    parentTextFieldSize.width.toDp()
-                })
+                modifier = modifier.width(
+                    with(LocalDensity.current) {
+                        parentTextFieldSize.width.toDp()
+                    }
+                )
             ) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -108,7 +110,7 @@ fun SearchableExpandedDropDownMenu(
                         onValueChange = { selectedSport ->
                             searchedOption = selectedSport
                             filteredItems = listOfItems.filter {
-                                it.contains(
+                                it.toString().contains(
                                     searchedOption,
                                     ignoreCase = true
                                 )
@@ -131,13 +133,13 @@ fun SearchableExpandedDropDownMenu(
                     items.forEach { selectedItem ->
                         DropdownMenuItem(
                             onClick = {
-                                selectedOptionText = selectedItem
+                                selectedOptionText = selectedItem.toString()
                                 onDropDownItemSelected(selectedItem)
                                 searchedOption = ""
                                 expanded = false
                             }
                         ) {
-                            Text(text = selectedItem)
+                            dropdownItem(selectedItem)
                         }
                     }
                 }
