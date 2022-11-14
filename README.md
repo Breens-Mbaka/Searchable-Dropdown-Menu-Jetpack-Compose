@@ -1,8 +1,13 @@
-<h1 align="center">Searchable-Dropdown-Menu-Jetpack-Compose</h1></br>
+<h1 align="center">Searchable-Dropdown-Menu-Jetpack-Compose</h1> </br>
 
 <p align="center">
-:search: A Jetpack Compose Android Library to create a dropdown menu that is searchable.
-</p></br>
+:rocket: A Jetpack Compose Android Library to create a dropdown menu that is searchable.
+</p> </br>
+<p align="center">
+ <a href="https://opensource.org/licenses/Apache-2.0"><img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg"/></a>
+ <a href="https://android-arsenal.com/api?level=21+"><img alt="API" src="https://img.shields.io/badge/API-15%2B-brightgreen.svg?style=flat"/></a>
+ <a href="https://github.com/Breens-Mbaka/Searchable-Dropdown-Menu-Jetpack-Compose/actions"><img alt="Build Status" src="https://github.com/skydoves/Balloon/workflows/Android%20CI/badge.svg"/></a> 
+</p> <br>
 
 # How to include it into your project
 ## Step 1. Add it in your root `build.gradle` at the end of repositories:
