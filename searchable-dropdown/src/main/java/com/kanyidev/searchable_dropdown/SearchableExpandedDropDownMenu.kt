@@ -30,27 +30,26 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 
 @Composable
-fun SearchableExpandedDropDownMenu(
+fun <T> SearchableExpandedDropDownMenu(
     modifier: Modifier = Modifier,
-    listOfItems: List<String>,
+    listOfItems: List<T>,
     enable: Boolean = false,
     placeholder: String = "Select Option",
     openedIcon: ImageVector = Icons.Outlined.KeyboardArrowUp,
     closedIcon: ImageVector = Icons.Outlined.KeyboardArrowDown,
     parentTextFieldCornerRadius: Dp = 12.dp,
     colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors(),
-    onDropDownItemSelected: (String) -> Unit = {}
+    onDropDownItemSelected: (T) -> Unit = {},
+    dropdownItem: @Composable (T) -> Unit
 ) {
-
     var selectedOptionText by rememberSaveable { mutableStateOf("") }
     var searchedOption by rememberSaveable { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
-    var filteredItems = mutableListOf<String>()
+    var filteredItems = mutableListOf<T>()
     var parentTextFieldSize by remember { mutableStateOf(Size.Zero) }
 
     Column(
@@ -106,7 +105,7 @@ fun SearchableExpandedDropDownMenu(
                         onValueChange = { selectedSport ->
                             searchedOption = selectedSport
                             filteredItems = listOfItems.filter {
-                                it.contains(
+                                it.toString().contains(
                                     searchedOption,
                                     ignoreCase = true
                                 )
@@ -129,13 +128,13 @@ fun SearchableExpandedDropDownMenu(
                     items.forEach { selectedItem ->
                         DropdownMenuItem(
                             onClick = {
-                                selectedOptionText = selectedItem
+                                selectedOptionText = selectedItem.toString()
                                 onDropDownItemSelected(selectedItem)
                                 searchedOption = ""
                                 expanded = false
                             }
                         ) {
-                            Text(text = selectedItem)
+                            dropdownItem(selectedItem)
                         }
                     }
                 }
