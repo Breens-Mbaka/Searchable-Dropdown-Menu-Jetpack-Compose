@@ -65,7 +65,7 @@ fun DropDownItem(test: Test) {
     ) {
         Icon(
             Icons.Outlined.Check,
-            contentDescription = "drop down arrow"
+            contentDescription = "Check Mark"
         )
         Spacer(modifier = Modifier.width(12.dp))
         Text(test.name)
