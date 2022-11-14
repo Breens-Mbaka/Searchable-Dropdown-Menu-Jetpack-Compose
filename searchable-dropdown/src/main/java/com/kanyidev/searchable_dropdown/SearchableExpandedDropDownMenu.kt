@@ -96,7 +96,7 @@ fun SearchableExpandedDropDownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false }) {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(28.dp)
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     OutlinedTextField(
                         modifier = modifier
