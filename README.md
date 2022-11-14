@@ -25,15 +25,15 @@ dependencies {
 val sports = mutableListOf("Basketball", "Rugby", "Football", "MMA", "Motorsport", "Snooker", "Tennis")
 
 SearchableExpandedDropDownMenu(
-listOfItems = sports // provide the list of items you want to be populated in the dropdown,
+listOfItems = sports // provide the list of items you want to populated in the dropdown,
 modifier = Modifier.fillMaxWidth(),
 onDropDownItemSelected = { item -> // Returns the item selected in the dropdown
     Toast.makeText(applicationContext, item, Toast.LENGTH_SHORT).show()
     },
-placeholder = "Select option" // Add your preferres placeholder name,
+placeholder = "Select option" // Add your preferred placeholder name,
 openedIcon = // Add your preffered icon when the dropdown is opened,
 closedIcon = // Add your preffered icon when the dropdown is closed,
-parentTextFieldCornerRadius = // By default the corner radius is 12.dp but you customize it,
+parentTextFieldCornerRadius = // By default the corner radius is 12.dp but you can customize it,
 colors = // Customize the colors of the input text, background and content used in a text field in different states,
 
 )
