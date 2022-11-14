@@ -9,6 +9,10 @@
  <a href="https://github.com/Breens-Mbaka/Searchable-Dropdown-Menu-Jetpack-Compose/actions"><img alt="Build Status" src="https://github.com/skydoves/Balloon/workflows/Android%20CI/badge.svg"/></a> 
 </p> <br>
 
+<p align="center">
+<img src="https://user-images.githubusercontent.com/72180010/201576619-b55118ba-9510-49ea-9110-0bcbe025d7a7.gif" width="280"/>
+</p>
+
 # How to include it into your project
 ## Step 1. Add it in your root `build.gradle` at the end of repositories:
 ```gradle
@@ -45,9 +49,6 @@ colors = // Customize the colors of the input text, background and content used 
 
 )
 ```
-
-# Demo
-https://user-images.githubusercontent.com/72180010/201535016-671bbebe-a030-42c6-b8b0-627ce4d2874d.mov
 
 # License
 ```
