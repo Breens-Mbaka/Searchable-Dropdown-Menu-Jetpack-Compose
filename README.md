@@ -1,6 +1,8 @@
-# Searchable-Dropdown-Menu-Jetpack-Compose
+<h1 align="center">Searchable-Dropdown-Menu-Jetpack-Compose</h1></br>
 
-This is a simple Android Library to help you create a dropdown that is searchable in Jetpack Compose
+<p align="center">
+:search: A Jetpack Compose Android Library to create a dropdown menu that is searchable.
+</p></br>
 
 # How to include it into your project
 ## Step 1. Add it in your root `build.gradle` at the end of repositories:
