@@ -14,11 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.outlined.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -35,22 +31,26 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .padding(16.dp)
                 ) {
-                    val sports =
-                        mutableListOf(
-                            Test("Name", 1),
-                            Test("Name", 1),
-                            Test("Name", 1),
-                            Test("Name", 1),
-                            Test("Name", 1),
-                            Test("Name", 1)
-                        )
+                    val sports = mutableListOf(
+                        Sport("Basketball", "🏀"),
+                        Sport("Rugby", "🏉"),
+                        Sport("Football", "⚽️"),
+                        Sport("MMA", "🤼‍♂️"),
+                        Sport("Motorsport", "🏁"),
+                        Sport("Snooker", "🎱"),
+                        Sport("Tennis", "🎾")
+                    )
                     LazyColumn() {
                         items(50) {
                             SearchableExpandedDropDownMenu(
                                 listOfItems = sports,
                                 modifier = Modifier.fillMaxWidth(),
                                 onDropDownItemSelected = { item ->
-                                    Toast.makeText(applicationContext, item.name, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        applicationContext,
+                                        item.name,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 },
                                 dropdownItem = { test ->
                                     DropDownItem(test = test)
@@ -66,26 +66,23 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun DropDownItem(test: Test) {
+fun DropDownItem(test: Sport) {
     Row(
         modifier = Modifier
             .padding(8.dp)
             .wrapContentSize()
     ) {
-        Icon(
-            Icons.Outlined.Check,
-            contentDescription = "drop down arrow"
-        )
+        Text(text = test.emoji)
         Spacer(modifier = Modifier.width(12.dp))
         Text(test.name)
     }
 }
 
-data class Test(
+data class Sport(
     val name: String,
-    val id: Int
-) {
+    val emoji: String
+){
     override fun toString(): String {
-        return name
+        return "$emoji $name"
     }
 }

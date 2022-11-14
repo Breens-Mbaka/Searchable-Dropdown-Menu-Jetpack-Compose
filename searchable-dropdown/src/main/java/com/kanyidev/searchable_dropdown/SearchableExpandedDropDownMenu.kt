@@ -15,6 +15,7 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldColors
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.Typography
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
@@ -35,6 +36,19 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 
+/**
+ * 🚀 A Jetpack Compose Android Library to create a dropdown menu that is searchable.
+ * @param modifier a modifier for this SearchableExpandedDropDownMenu and its children
+ * @param listOfItems A list of objects that you want to display as a dropdown
+ * @param placeholder the optional placeholder to be displayed when the text field is in focus and
+ * the input text is empty. The default text style for internal [Text] is [Typography.subtitle1]
+ * @param openedIcon the Icon displayed when the dropdown is opened. Default Icon is [Icons.Outlined.KeyboardArrowUp]
+ * @param closedIcon Icon displayed when the dropdown is closed. Default Icon is [Icons.Outlined.KeyboardArrowDown]
+ * @param parentTextFieldCornerRadius : Defines the radius of the enclosing OutlinedTextField. Default Radius is 12.dp
+ * @param colors [TextFieldColors] that will be used to resolve color of the text and content
+ * (including label, placeholder, leading and trailing icons, border) for this text field in
+ * different states. See [TextFieldDefaults.outlinedTextFieldColors]
+ */
 @Composable
 fun <T> SearchableExpandedDropDownMenu(
     modifier: Modifier = Modifier,
