@@ -81,7 +81,7 @@ fun DropDownItem(test: Sport) {
 data class Sport(
     val name: String,
     val emoji: String
-){
+) {
     override fun toString(): String {
         return "$emoji $name"
     }

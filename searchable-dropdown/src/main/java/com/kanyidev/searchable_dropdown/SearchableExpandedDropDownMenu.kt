@@ -5,9 +5,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
+import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconToggleButton
@@ -31,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
@@ -106,15 +104,12 @@ fun <T> SearchableExpandedDropDownMenu(
             shape = RoundedCornerShape(parentTextFieldCornerRadius)
         )
         if (expanded) {
-            Card(
-                modifier = modifier.width(
-                    with(LocalDensity.current) {
-                        parentTextFieldSize.width.toDp()
-                    }
-                )
-            ) {
+            DropdownMenu(
+                modifier = modifier,
+                expanded = expanded,
+                onDismissRequest = { expanded = false }) {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     OutlinedTextField(
                         modifier = modifier
