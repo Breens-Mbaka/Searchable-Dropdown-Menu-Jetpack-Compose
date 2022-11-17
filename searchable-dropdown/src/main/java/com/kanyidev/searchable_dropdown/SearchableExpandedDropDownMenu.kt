@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
@@ -21,18 +22,17 @@ import androidx.compose.material.icons.outlined.KeyboardArrowUp
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.toSize
 
 /**
  * 🚀 A Jetpack Compose Android Library to create a dropdown menu that is searchable.
@@ -64,7 +64,29 @@ fun <T> SearchableExpandedDropDownMenu(
     var searchedOption by rememberSaveable { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
     var filteredItems = mutableListOf<T>()
-    var parentTextFieldSize by remember { mutableStateOf(Size.Zero) }
+
+    val itemHeights = remember { mutableStateMapOf<Int, Int>() }
+    val baseHeight = 530.dp
+    val density = LocalDensity.current
+
+    val maxHeight = remember(itemHeights.toMap()) {
+        if (itemHeights.keys.toSet() != listOfItems.indices.toSet()) {
+            // if we don't have all heights calculated yet, return default value
+            return@remember baseHeight
+        }
+        val baseHeightInt = with(density) { baseHeight.toPx().toInt() }
+
+        // top+bottom system padding
+        var sum = with(density) { DropdownMenuVerticalPadding.toPx().toInt() } * 2
+        for ((i, itemSize) in itemHeights.toSortedMap()) {
+            sum += itemSize
+            if (sum >= baseHeightInt) {
+                return@remember with(density) { (sum - itemSize / 2).toDp() }
+            }
+        }
+        // all items fit into base height
+        baseHeight
+    }
 
     Column(
         modifier = modifier,
@@ -72,9 +94,6 @@ fun <T> SearchableExpandedDropDownMenu(
     ) {
         OutlinedTextField(
             modifier = modifier
-                .onGloballyPositioned { coordinates ->
-                    parentTextFieldSize = coordinates.size.toSize()
-                }
                 .clickable {
                     expanded = !expanded
                 },
@@ -105,7 +124,9 @@ fun <T> SearchableExpandedDropDownMenu(
         )
         if (expanded) {
             DropdownMenu(
-                modifier = modifier,
+                modifier = Modifier
+                    .fillMaxWidth(0.75f)
+                    .requiredSizeIn(maxHeight = maxHeight),
                 expanded = expanded,
                 onDismissRequest = { expanded = false }) {
                 Column(
@@ -156,3 +177,5 @@ fun <T> SearchableExpandedDropDownMenu(
         }
     }
 }
+
+private val DropdownMenuVerticalPadding = 8.dp
