@@ -65,6 +65,10 @@ If your project uses Searchable-Dropdown-Menu-Jetpack-Compose, please let me kno
 
 > The library was majorly created out of necessity at work by my colleagues and I, since they isn't an out of the box solution in Jetpack compose to have a searchable dropdown menu.
 
+# Find this repository useful? :heart:
+Support it by joining __[stargazers](https://github.com/Breens-Mbaka/Searchable-Dropdown-Menu-Jetpack-Compose/stargazers)__ for this repository. :star: <br>
+Also __[follow](https://github.com/Breens-Mbaka)__ me for my next creations! 🤩
+
 # License
 
 ```
