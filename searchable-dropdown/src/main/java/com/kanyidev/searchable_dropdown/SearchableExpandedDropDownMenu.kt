@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
  * 🚀 A Jetpack Compose Android Library to create a dropdown menu that is searchable.
  * @param modifier a modifier for this SearchableExpandedDropDownMenu and its children
  * @param listOfItems A list of objects that you want to display as a dropdown
+ * @param enable controls the enabled state of the OutlinedTextField. When false, the text field will be neither editable nor focusable, the input of the text field will not be selectable, visually text field will appear in the disabled UI state
  * @param placeholder the optional placeholder to be displayed when the text field is in focus and
  * the input text is empty. The default text style for internal [Text] is [Typography.subtitle1]
  * @param openedIcon the Icon displayed when the dropdown is opened. Default Icon is [Icons.Outlined.KeyboardArrowUp]
@@ -46,6 +47,8 @@ import androidx.compose.ui.unit.dp
  * @param colors [TextFieldColors] that will be used to resolve color of the text and content
  * (including label, placeholder, leading and trailing icons, border) for this text field in
  * different states. See [TextFieldDefaults.outlinedTextFieldColors]
+ * @param onDropDownItemSelected Returns the item that was selected from the dropdown
+ * @param dropdownItem Provide a composable that will be used to populate the dropdown and that takes a type i.e String,Int or even a custom type
  */
 @Composable
 fun <T> SearchableExpandedDropDownMenu(

@@ -11,11 +11,13 @@
 </p> <br>
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/72180010/201577423-b5b12963-e15f-4cf2-9687-1ce08199e2a1.gif" width="280"/>
+<img src="https://user-images.githubusercontent.com/72180010/202379794-eda0b27c-6df7-4544-80f4-d34c8e5c0eb9.gif" width="280"/>
 </p>
 
 # How to include it into your project
+
 ## Step 1. Add it in your root `build.gradle` at the end of repositories:
+
 ```gradle
 allprojects {
     repositories {
@@ -26,6 +28,7 @@ allprojects {
 ```
 
 ## Step 2. Add the dependency
+
 ```gradle
 dependencies {
     implementation 'com.github.Breens-Mbaka:Searchable-Dropdown-Menu-Jetpack-Compose:0.2.1'
@@ -33,25 +36,37 @@ dependencies {
 ```
 
 # Usage
+
 ``` Kotlin
 val sports = mutableListOf("Basketball", "Rugby", "Football", "MMA", "Motorsport", "Snooker", "Tennis")
 
 SearchableExpandedDropDownMenu(
-listOfItems = sports // provide the list of items you want to populated in the dropdown,
+listOfItems = sports // provide the list of items of any type you want to populated in the dropdown,
 modifier = Modifier.fillMaxWidth(),
 onDropDownItemSelected = { item -> // Returns the item selected in the dropdown
-    Toast.makeText(applicationContext, item, Toast.LENGTH_SHORT).show()
+      Toast.makeText(applicationContext, item, Toast.LENGTH_SHORT).show()
     },
+enabled = // controls the enabled state of the OutlinedTextField
 placeholder = "Select option" // Add your preferred placeholder name,
 openedIcon = // Add your preffered icon when the dropdown is opened,
 closedIcon = // Add your preffered icon when the dropdown is closed,
 parentTextFieldCornerRadius = // By default the corner radius is 12.dp but you can customize it,
-colors = // Customize the colors of the input text, background and content used in a text field in different states,
-
+colors = // Customize the colors of the input text, background and content used in a text field in different states
+dropdownItem = { name -> // Provide a Composable that will be used to populate the dropdown and that takes a type i.e String,Int or even a custom type
+      Text(name)
+   },
 )
 ```
 
+# Who's using Searchable-Dropdown-Menu-Jetpack-Compose?
+If your project uses Searchable-Dropdown-Menu-Jetpack-Compose, please let me know by creating a new issue! 😊
+
+# Inspiration
+
+> The library was majorly created out of necessity at work by my colleagues and I, since they isn't an out of the box solution in Jetpack compose to have a searchable dropdown menu.
+
 # License
+
 ```
 Copyright 2022 Breens-Mbaka
 
