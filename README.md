@@ -46,7 +46,7 @@ modifier = Modifier.fillMaxWidth(),
 onDropDownItemSelected = { item -> // Returns the item selected in the dropdown
       Toast.makeText(applicationContext, item, Toast.LENGTH_SHORT).show()
     },
-enabled = // controls the enabled state of the OutlinedTextField
+enable = // controls the enabled state of the OutlinedTextField
 placeholder = "Select option" // Add your preferred placeholder name,
 openedIcon = // Add your preffered icon when the dropdown is opened,
 closedIcon = // Add your preffered icon when the dropdown is closed,
