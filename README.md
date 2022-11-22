@@ -31,7 +31,7 @@ allprojects {
 
 ```gradle
 dependencies {
-    implementation 'com.github.Breens-Mbaka:Searchable-Dropdown-Menu-Jetpack-Compose:0.2.3'
+    implementation 'com.github.Breens-Mbaka:Searchable-Dropdown-Menu-Jetpack-Compose:0.2.4'
 }
 ```
 
