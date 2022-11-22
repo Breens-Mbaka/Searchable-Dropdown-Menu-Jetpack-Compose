@@ -81,7 +81,7 @@ fun <T> SearchableExpandedDropDownMenu(
 
         // top+bottom system padding
         var sum = with(density) { DropdownMenuVerticalPadding.toPx().toInt() } * 2
-        for ((i, itemSize) in itemHeights.toSortedMap()) {
+        for ((_, itemSize) in itemHeights.toSortedMap()) {
             sum += itemSize
             if (sum >= baseHeightInt) {
                 return@remember with(density) { (sum - itemSize / 2).toDp() }
