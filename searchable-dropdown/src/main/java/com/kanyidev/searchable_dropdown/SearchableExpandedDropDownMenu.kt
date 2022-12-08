@@ -61,7 +61,8 @@ fun <T> SearchableExpandedDropDownMenu(
     parentTextFieldCornerRadius: Dp = 12.dp,
     colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors(),
     onDropDownItemSelected: (T) -> Unit = {},
-    dropdownItem: @Composable (T) -> Unit
+    dropdownItem: @Composable (T) -> Unit,
+    isError: Boolean = false
 ) {
     var selectedOptionText by rememberSaveable { mutableStateOf("") }
     var searchedOption by rememberSaveable { mutableStateOf("") }
@@ -123,7 +124,8 @@ fun <T> SearchableExpandedDropDownMenu(
                     )
                 }
             },
-            shape = RoundedCornerShape(parentTextFieldCornerRadius)
+            shape = RoundedCornerShape(parentTextFieldCornerRadius),
+            isError = isError
         )
         if (expanded) {
             DropdownMenu(
