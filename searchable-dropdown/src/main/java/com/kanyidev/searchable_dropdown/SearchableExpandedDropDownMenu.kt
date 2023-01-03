@@ -7,19 +7,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.IconToggleButton
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextFieldColors
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.Typography
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.MenuDefaults
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
@@ -50,11 +51,13 @@ import androidx.compose.ui.unit.dp
  * @param onDropDownItemSelected Returns the item that was selected from the dropdown
  * @param dropdownItem Provide a composable that will be used to populate the dropdown and that takes a type i.e String,Int or even a custom type
  */
+
 @Composable
 fun <T> SearchableExpandedDropDownMenu(
     modifier: Modifier = Modifier,
     listOfItems: List<T>,
-    enable: Boolean = false,
+    enable: Boolean = true,
+    readOnly: Boolean = true,
     placeholder: String = "Select Option",
     openedIcon: ImageVector = Icons.Outlined.KeyboardArrowUp,
     closedIcon: ImageVector = Icons.Outlined.KeyboardArrowDown,
@@ -103,6 +106,7 @@ fun <T> SearchableExpandedDropDownMenu(
                 },
             colors = colors,
             value = selectedOptionText,
+            readOnly = readOnly,
             enabled = enable,
             onValueChange = { selectedOptionText = it },
             placeholder = {
@@ -133,7 +137,8 @@ fun <T> SearchableExpandedDropDownMenu(
                     .fillMaxWidth(0.75f)
                     .requiredSizeIn(maxHeight = maxHeight),
                 expanded = expanded,
-                onDismissRequest = { expanded = false }) {
+                onDismissRequest = { expanded = false }
+            ) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
@@ -172,10 +177,12 @@ fun <T> SearchableExpandedDropDownMenu(
                                 onDropDownItemSelected(selectedItem)
                                 searchedOption = ""
                                 expanded = false
-                            }
-                        ) {
-                            dropdownItem(selectedItem)
-                        }
+                            },
+                            text = {
+                                dropdownItem(selectedItem)
+                            },
+                            colors = MenuDefaults.itemColors()
+                        )
                     }
                 }
             }
