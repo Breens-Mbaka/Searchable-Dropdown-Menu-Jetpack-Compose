@@ -1,4 +1,4 @@
-<h1 align="center">Searchable-Dropdown-Menu-Jetpack-Compose</h1> </br>
+<h2 align="center">Searchable-Dropdown-Menu-Jetpack-Compose</h2> </br>
 
 <p align="center">
 :rocket: A Jetpack Compose Android Library to create a dropdown menu that is searchable.
@@ -14,9 +14,9 @@
 <img src="https://user-images.githubusercontent.com/72180010/202379794-eda0b27c-6df7-4544-80f4-d34c8e5c0eb9.gif" width="280"/>
 </p>
 
-# How to include it into your project
+## How to include it into your project
 
-## Step 1. Add it in your root `build.gradle` at the end of repositories:
+### Step 1. Add it in your root `build.gradle` at the end of repositories:
 
 ```gradle
 allprojects {
@@ -27,7 +27,7 @@ allprojects {
 }
 ```
 
-## Step 2. Add the dependency
+### Step 2. Add the dependency
 
 ```gradle
 dependencies {
@@ -35,7 +35,11 @@ dependencies {
 }
 ```
 
-# Usage
+### :warning: NOTE: 
+- To use the current version of the library please make sure you add material 3 dependency in your app level module. This will be fixed in the next update.
+- Alternatively, you can use a previous version of the library so as to avoid this workaround.
+
+### Usage
 
 ``` Kotlin
 val sports = mutableListOf("Basketball", "Rugby", "Football", "MMA", "Motorsport", "Snooker", "Tennis")
@@ -58,18 +62,18 @@ dropdownItem = { name -> // Provide a Composable that will be used to populate t
 )
 ```
 
-# Who's using Searchable-Dropdown-Menu-Jetpack-Compose?
+### Who's using Searchable-Dropdown-Menu-Jetpack-Compose?
 If your project uses Searchable-Dropdown-Menu-Jetpack-Compose, please let me know by creating a new issue! 😊
 
-# Inspiration
+### Inspiration
 
 > The library was majorly created out of necessity at work by my colleagues and I, since they isn't an out of the box solution in Jetpack compose to have a searchable dropdown menu.
 
-# Find this repository useful? :heart:
+### Find this repository useful? :heart:
 Support it by joining __[stargazers](https://github.com/Breens-Mbaka/Searchable-Dropdown-Menu-Jetpack-Compose/stargazers)__ for this repository. :star: <br>
 Also __[follow](https://github.com/Breens-Mbaka)__ me for my next creations! 🤩
 
-# License
+### License
 
 ```
 Copyright 2022 Breens-Mbaka
