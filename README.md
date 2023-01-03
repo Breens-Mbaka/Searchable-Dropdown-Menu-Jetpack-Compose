@@ -1,4 +1,4 @@
-<h1 align="center">Searchable-Dropdown-Menu-Jetpack-Compose</h1> </br>
+<h2 align="center">Searchable-Dropdown-Menu-Jetpack-Compose</h2> </br>
 
 <p align="center">
 :rocket: A Jetpack Compose Android Library to create a dropdown menu that is searchable.
@@ -14,9 +14,9 @@
 <img src="https://user-images.githubusercontent.com/72180010/202379794-eda0b27c-6df7-4544-80f4-d34c8e5c0eb9.gif" width="280"/>
 </p>
 
-# How to include it into your project
+## How to include it into your project
 
-## Step 1. Add it in your root `build.gradle` at the end of repositories:
+### Step 1. Add it in your root `build.gradle` at the end of repositories:
 
 ```gradle
 allprojects {
@@ -27,7 +27,7 @@ allprojects {
 }
 ```
 
-## Step 2. Add the dependency
+### Step 2. Add the dependency
 
 ```gradle
 dependencies {
