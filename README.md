@@ -35,7 +35,9 @@ dependencies {
 }
 ```
 
-# Usage
+### :warning: NOTE: To use library please make sure you add the material 3 dependency in your app level module. This will be fixed in the next update.
+
+### Usage
 
 ``` Kotlin
 val sports = mutableListOf("Basketball", "Rugby", "Football", "MMA", "Motorsport", "Snooker", "Tennis")
@@ -58,18 +60,18 @@ dropdownItem = { name -> // Provide a Composable that will be used to populate t
 )
 ```
 
-# Who's using Searchable-Dropdown-Menu-Jetpack-Compose?
+### Who's using Searchable-Dropdown-Menu-Jetpack-Compose?
 If your project uses Searchable-Dropdown-Menu-Jetpack-Compose, please let me know by creating a new issue! 😊
 
-# Inspiration
+### Inspiration
 
 > The library was majorly created out of necessity at work by my colleagues and I, since they isn't an out of the box solution in Jetpack compose to have a searchable dropdown menu.
 
-# Find this repository useful? :heart:
+### Find this repository useful? :heart:
 Support it by joining __[stargazers](https://github.com/Breens-Mbaka/Searchable-Dropdown-Menu-Jetpack-Compose/stargazers)__ for this repository. :star: <br>
 Also __[follow](https://github.com/Breens-Mbaka)__ me for my next creations! 🤩
 
-# License
+### License
 
 ```
 Copyright 2022 Breens-Mbaka
