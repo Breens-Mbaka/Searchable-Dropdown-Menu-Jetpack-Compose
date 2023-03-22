@@ -1,6 +1,7 @@
 package com.kanyidev.searchable_dropdown
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +24,7 @@ import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
@@ -32,9 +34,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+
 
 /**
  * 🚀 A Jetpack Compose Android Library to create a dropdown menu that is searchable.
@@ -102,10 +106,7 @@ fun <T> SearchableExpandedDropDownMenu(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedTextField(
-            modifier = modifier
-                .clickable {
-                    expanded = !expanded
-                },
+            modifier = modifier,
             colors = colors,
             value = selectedOptionText,
             readOnly = readOnly,
@@ -131,7 +132,17 @@ fun <T> SearchableExpandedDropDownMenu(
                 }
             },
             shape = RoundedCornerShape(parentTextFieldCornerRadius),
-            isError = isError
+            isError = isError,
+            interactionSource = remember { MutableInteractionSource() }
+                .also { interactionSource ->
+                    LaunchedEffect(interactionSource) {
+                        interactionSource.interactions.collect {
+                            if (it is PressInteraction.Release) {
+                                expanded  = !expanded
+                            }
+                        }
+                    }
+                }
         )
         if (expanded) {
             DropdownMenu(
