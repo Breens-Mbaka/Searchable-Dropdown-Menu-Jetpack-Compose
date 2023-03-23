@@ -34,7 +34,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -55,6 +54,7 @@ import androidx.compose.ui.unit.dp
  * different states. See [TextFieldDefaults.outlinedTextFieldColors]
  * @param onDropDownItemSelected Returns the item that was selected from the dropdown
  * @param dropdownItem Provide a composable that will be used to populate the dropdown and that takes a type i.e String,Int or even a custom type
+ * @param defaultItemIndex The index of the item to be selected by default in the dropdown list, if you don't provide any the first item in the dropdown will be selected
  */
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,7 +71,8 @@ fun <T> SearchableExpandedDropDownMenu(
     colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors(),
     onDropDownItemSelected: (T) -> Unit = {},
     dropdownItem: @Composable (T) -> Unit,
-    isError: Boolean = false
+    isError: Boolean = false,
+    defaultItemIndex: Int = 0
 ) {
     var selectedOptionText by rememberSaveable { mutableStateOf("") }
     var searchedOption by rememberSaveable { mutableStateOf("") }
@@ -81,6 +82,8 @@ fun <T> SearchableExpandedDropDownMenu(
     val itemHeights = remember { mutableStateMapOf<Int, Int>() }
     val baseHeight = 530.dp
     val density = LocalDensity.current
+
+    val defaultSelectedItem = selectedOptionText.ifEmpty { listOfItems[defaultItemIndex] }
 
     val maxHeight = remember(itemHeights.toMap()) {
         if (itemHeights.keys.toSet() != listOfItems.indices.toSet()) {
@@ -108,7 +111,7 @@ fun <T> SearchableExpandedDropDownMenu(
         OutlinedTextField(
             modifier = modifier,
             colors = colors,
-            value = selectedOptionText,
+            value = defaultSelectedItem.toString(),
             readOnly = readOnly,
             enabled = enable,
             onValueChange = { selectedOptionText = it },
@@ -138,7 +141,7 @@ fun <T> SearchableExpandedDropDownMenu(
                     LaunchedEffect(interactionSource) {
                         interactionSource.interactions.collect {
                             if (it is PressInteraction.Release) {
-                                expanded  = !expanded
+                                expanded = !expanded
                             }
                         }
                     }
