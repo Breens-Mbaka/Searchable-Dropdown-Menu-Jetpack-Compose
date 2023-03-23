@@ -54,7 +54,9 @@ import androidx.compose.ui.unit.dp
  * different states. See [TextFieldDefaults.outlinedTextFieldColors]
  * @param onDropDownItemSelected Returns the item that was selected from the dropdown
  * @param dropdownItem Provide a composable that will be used to populate the dropdown and that takes a type i.e String,Int or even a custom type
- * @param defaultItemIndex The index of the item to be selected by default in the dropdown list, if you don't provide any the first item in the dropdown will be selected
+ * @param showDefaultSelectedItem If set to true it will show the default selected item with the position of your preference, it's value is set to false by default
+ * @param defaultItemIndex Pass the index of the item to be selected by default from the dropdown list. If you don't provide any the first item in the dropdown will be selected
+ * @param defaultItem Returns the item selected by default from the dropdown list
  */
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -72,7 +74,9 @@ fun <T> SearchableExpandedDropDownMenu(
     onDropDownItemSelected: (T) -> Unit = {},
     dropdownItem: @Composable (T) -> Unit,
     isError: Boolean = false,
-    defaultItemIndex: Int = 0
+    showDefaultSelectedItem: Boolean = false,
+    defaultItemIndex: Int = 0,
+    defaultItem: (T) -> Unit
 ) {
     var selectedOptionText by rememberSaveable { mutableStateOf("") }
     var searchedOption by rememberSaveable { mutableStateOf("") }
@@ -83,7 +87,13 @@ fun <T> SearchableExpandedDropDownMenu(
     val baseHeight = 530.dp
     val density = LocalDensity.current
 
-    val defaultSelectedItem = selectedOptionText.ifEmpty { listOfItems[defaultItemIndex] }
+    if (showDefaultSelectedItem) {
+        selectedOptionText = selectedOptionText.ifEmpty { listOfItems[defaultItemIndex].toString() }
+
+        defaultItem(
+            listOfItems[defaultItemIndex]
+        )
+    }
 
     val maxHeight = remember(itemHeights.toMap()) {
         if (itemHeights.keys.toSet() != listOfItems.indices.toSet()) {
@@ -111,7 +121,7 @@ fun <T> SearchableExpandedDropDownMenu(
         OutlinedTextField(
             modifier = modifier,
             colors = colors,
-            value = defaultSelectedItem.toString(),
+            value = selectedOptionText,
             readOnly = readOnly,
             enabled = enable,
             onValueChange = { selectedOptionText = it },
