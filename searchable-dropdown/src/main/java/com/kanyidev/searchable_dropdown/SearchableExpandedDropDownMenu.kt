@@ -66,7 +66,7 @@ fun <T> SearchableExpandedDropDownMenu(
     listOfItems: List<T>,
     enable: Boolean = true,
     readOnly: Boolean = true,
-    placeholder: String = "Select Option",
+    placeholder: @Composable (() -> Unit) = { Text(text = "Select Option") },
     openedIcon: ImageVector = Icons.Outlined.KeyboardArrowUp,
     closedIcon: ImageVector = Icons.Outlined.KeyboardArrowDown,
     parentTextFieldCornerRadius: Dp = 12.dp,
@@ -125,9 +125,7 @@ fun <T> SearchableExpandedDropDownMenu(
             readOnly = readOnly,
             enabled = enable,
             onValueChange = { selectedOptionText = it },
-            placeholder = {
-                Text(text = placeholder)
-            },
+            placeholder = placeholder,
             trailingIcon = {
                 IconToggleButton(
                     checked = expanded,
