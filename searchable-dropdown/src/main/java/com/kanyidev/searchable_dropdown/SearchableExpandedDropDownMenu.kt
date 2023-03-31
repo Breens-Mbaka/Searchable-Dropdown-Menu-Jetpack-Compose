@@ -34,7 +34,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -55,6 +54,9 @@ import androidx.compose.ui.unit.dp
  * different states. See [TextFieldDefaults.outlinedTextFieldColors]
  * @param onDropDownItemSelected Returns the item that was selected from the dropdown
  * @param dropdownItem Provide a composable that will be used to populate the dropdown and that takes a type i.e String,Int or even a custom type
+ * @param showDefaultSelectedItem If set to true it will show the default selected item with the position of your preference, it's value is set to false by default
+ * @param defaultItemIndex Pass the index of the item to be selected by default from the dropdown list. If you don't provide any the first item in the dropdown will be selected
+ * @param defaultItem Returns the item selected by default from the dropdown list
  */
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,7 +73,10 @@ fun <T> SearchableExpandedDropDownMenu(
     colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors(),
     onDropDownItemSelected: (T) -> Unit = {},
     dropdownItem: @Composable (T) -> Unit,
-    isError: Boolean = false
+    isError: Boolean = false,
+    showDefaultSelectedItem: Boolean = false,
+    defaultItemIndex: Int = 0,
+    defaultItem: (T) -> Unit
 ) {
     var selectedOptionText by rememberSaveable { mutableStateOf("") }
     var searchedOption by rememberSaveable { mutableStateOf("") }
@@ -81,6 +86,14 @@ fun <T> SearchableExpandedDropDownMenu(
     val itemHeights = remember { mutableStateMapOf<Int, Int>() }
     val baseHeight = 530.dp
     val density = LocalDensity.current
+
+    if (showDefaultSelectedItem) {
+        selectedOptionText = selectedOptionText.ifEmpty { listOfItems[defaultItemIndex].toString() }
+
+        defaultItem(
+            listOfItems[defaultItemIndex]
+        )
+    }
 
     val maxHeight = remember(itemHeights.toMap()) {
         if (itemHeights.keys.toSet() != listOfItems.indices.toSet()) {
@@ -138,7 +151,7 @@ fun <T> SearchableExpandedDropDownMenu(
                     LaunchedEffect(interactionSource) {
                         interactionSource.interactions.collect {
                             if (it is PressInteraction.Release) {
-                                expanded  = !expanded
+                                expanded = !expanded
                             }
                         }
                     }

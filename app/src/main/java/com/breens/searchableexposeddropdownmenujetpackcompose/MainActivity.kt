@@ -1,6 +1,7 @@
 package com.breens.searchableexposeddropdownmenujetpackcompose
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -40,7 +41,7 @@ class MainActivity : ComponentActivity() {
                         Sport("Snooker", "🎱"),
                         Sport("Tennis", "🎾")
                     )
-                    LazyColumn() {
+                    LazyColumn {
                         items(50) {
                             SearchableExpandedDropDownMenu(
                                 listOfItems = sports,
@@ -54,6 +55,9 @@ class MainActivity : ComponentActivity() {
                                 },
                                 dropdownItem = { test ->
                                     DropDownItem(test = test)
+                                },
+                                defaultItem = {
+                                    Log.e("DEFAULT_ITEM", it.name)
                                 }
                             )
                             Spacer(modifier = Modifier.height(12.dp))
