@@ -15,7 +15,6 @@
  */
 package com.kanyidev.searchable_dropdown
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
@@ -191,10 +190,7 @@ fun <T> SearchableExpandedDropDownMenu(
                     OutlinedTextField(
                         modifier = modifier
                             .fillMaxWidth()
-                            .padding(16.dp)
-                            .clickable {
-                                keyboardController?.show()
-                            },
+                            .padding(16.dp),
                         value = searchedOption,
                         onValueChange = { selectedSport ->
                             searchedOption = selectedSport
@@ -211,6 +207,12 @@ fun <T> SearchableExpandedDropDownMenu(
                         placeholder = {
                             Text(text = "Search")
                         },
+                        interactionSource = remember { MutableInteractionSource() }
+                            .also { interactionSource ->
+                                LaunchedEffect(interactionSource) {
+                                    keyboardController?.show()
+                                }
+                            },
                     )
 
                     val items = if (filteredItems.isEmpty()) {
