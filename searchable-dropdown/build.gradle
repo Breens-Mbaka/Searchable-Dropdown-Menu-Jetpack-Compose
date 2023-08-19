@@ -56,7 +56,7 @@ afterEvaluate {
 
                 groupId = 'com.github.Breens-Mbaka'
                 artifactId = 'searchable-dropdown'
-                version = '1.0.7'
+                version = '0.3.0'
             }
         }
     }
