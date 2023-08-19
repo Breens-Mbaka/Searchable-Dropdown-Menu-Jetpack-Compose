@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
                 Column(
                     Modifier
                         .fillMaxSize()
-                        .padding(16.dp)
+                        .padding(16.dp),
                 ) {
                     val sports = mutableListOf(
                         Sport("Basketball", "🏀"),
@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
                         Sport("MMA", "🤼‍♂️"),
                         Sport("Motorsport", "🏁"),
                         Sport("Snooker", "🎱"),
-                        Sport("Tennis", "🎾")
+                        Sport("Tennis", "🎾"),
                     )
                     LazyColumn {
                         items(50) {
@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
                                     Toast.makeText(
                                         applicationContext,
                                         item.name,
-                                        Toast.LENGTH_SHORT
+                                        Toast.LENGTH_SHORT,
                                     ).show()
                                 },
                                 dropdownItem = { test ->
@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
                                 },
                                 defaultItem = {
                                     Log.e("DEFAULT_ITEM", it.name)
-                                }
+                                },
                             )
                             Spacer(modifier = Modifier.height(12.dp))
                         }
@@ -74,7 +74,7 @@ fun DropDownItem(test: Sport) {
     Row(
         modifier = Modifier
             .padding(8.dp)
-            .wrapContentSize()
+            .wrapContentSize(),
     ) {
         Text(text = test.emoji)
         Spacer(modifier = Modifier.width(12.dp))
@@ -84,7 +84,7 @@ fun DropDownItem(test: Sport) {
 
 data class Sport(
     val name: String,
-    val emoji: String
+    val emoji: String,
 ) {
     override fun toString(): String {
         return "$emoji $name"
