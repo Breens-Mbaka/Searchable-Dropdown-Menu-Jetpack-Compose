@@ -15,6 +15,7 @@
  */
 package com.kanyidev.searchable_dropdown
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
@@ -73,6 +74,7 @@ import androidx.compose.ui.unit.dp
  * @param showDefaultSelectedItem If set to true it will show the default selected item with the position of your preference, it's value is set to false by default
  * @param defaultItemIndex Pass the index of the item to be selected by default from the dropdown list. If you don't provide any the first item in the dropdown will be selected
  * @param defaultItem Returns the item selected by default from the dropdown list
+ * @param onSearchTextFieldClicked use this if you are having problems with the keyboard showing, use this to show keyboard on your side
  */
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
@@ -93,6 +95,7 @@ fun <T> SearchableExpandedDropDownMenu(
     showDefaultSelectedItem: Boolean = false,
     defaultItemIndex: Int = 0,
     defaultItem: (T) -> Unit,
+    onSearchTextFieldClicked: () -> Unit,
 ) {
     var selectedOptionText by rememberSaveable { mutableStateOf("") }
     var searchedOption by rememberSaveable { mutableStateOf("") }
@@ -190,7 +193,10 @@ fun <T> SearchableExpandedDropDownMenu(
                     OutlinedTextField(
                         modifier = modifier
                             .fillMaxWidth()
-                            .padding(16.dp),
+                            .padding(16.dp)
+                            .clickable {
+                                onSearchTextFieldClicked()
+                            },
                         value = searchedOption,
                         onValueChange = { selectedSport ->
                             searchedOption = selectedSport
@@ -207,12 +213,6 @@ fun <T> SearchableExpandedDropDownMenu(
                         placeholder = {
                             Text(text = "Search")
                         },
-                        interactionSource = remember { MutableInteractionSource() }
-                            .also { interactionSource ->
-                                LaunchedEffect(interactionSource) {
-                                    keyboardController?.show()
-                                }
-                            },
                     )
 
                     val items = if (filteredItems.isEmpty()) {
