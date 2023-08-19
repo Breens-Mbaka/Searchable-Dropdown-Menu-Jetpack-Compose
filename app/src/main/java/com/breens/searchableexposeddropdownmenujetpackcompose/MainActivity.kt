@@ -17,15 +17,20 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import com.breens.searchableexposeddropdownmenujetpackcompose.ui.theme.SearchableExposedDropDownMenuJetpackComposeTheme
 import com.kanyidev.searchable_dropdown.SearchableExpandedDropDownMenu
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val keyboardController = LocalSoftwareKeyboardController.current
+
             SearchableExposedDropDownMenuJetpackComposeTheme {
                 Column(
                     Modifier
@@ -59,6 +64,9 @@ class MainActivity : ComponentActivity() {
                                 defaultItem = {
                                     Log.e("DEFAULT_ITEM", it.name)
                                 },
+                                onSearchTextFieldClicked = {
+                                    keyboardController?.show()
+                                }
                             )
                             Spacer(modifier = Modifier.height(12.dp))
                         }
