@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 d.light Limited.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.kanyidev.searchable_dropdown
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -32,12 +47,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-
 
 /**
  * 🚀 A Jetpack Compose Android Library to create a dropdown menu that is searchable.
@@ -59,7 +75,7 @@ import androidx.compose.ui.unit.dp
  * @param defaultItem Returns the item selected by default from the dropdown list
  */
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun <T> SearchableExpandedDropDownMenu(
     modifier: Modifier = Modifier,
@@ -76,13 +92,13 @@ fun <T> SearchableExpandedDropDownMenu(
     isError: Boolean = false,
     showDefaultSelectedItem: Boolean = false,
     defaultItemIndex: Int = 0,
-    defaultItem: (T) -> Unit
+    defaultItem: (T) -> Unit,
 ) {
     var selectedOptionText by rememberSaveable { mutableStateOf("") }
     var searchedOption by rememberSaveable { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
     var filteredItems = mutableListOf<T>()
-
+    val keyboardController = LocalSoftwareKeyboardController.current
     val itemHeights = remember { mutableStateMapOf<Int, Int>() }
     val baseHeight = 530.dp
     val density = LocalDensity.current
@@ -91,7 +107,7 @@ fun <T> SearchableExpandedDropDownMenu(
         selectedOptionText = selectedOptionText.ifEmpty { listOfItems[defaultItemIndex].toString() }
 
         defaultItem(
-            listOfItems[defaultItemIndex]
+            listOfItems[defaultItemIndex],
         )
     }
 
@@ -116,7 +132,7 @@ fun <T> SearchableExpandedDropDownMenu(
 
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         OutlinedTextField(
             modifier = modifier,
@@ -131,15 +147,19 @@ fun <T> SearchableExpandedDropDownMenu(
                     checked = expanded,
                     onCheckedChange = {
                         expanded = it
-                    }
+                    },
                 ) {
-                    if (expanded) Icon(
-                        imageVector = openedIcon,
-                        contentDescription = null
-                    ) else Icon(
-                        imageVector = closedIcon,
-                        contentDescription = null
-                    )
+                    if (expanded) {
+                        Icon(
+                            imageVector = openedIcon,
+                            contentDescription = null,
+                        )
+                    } else {
+                        Icon(
+                            imageVector = closedIcon,
+                            contentDescription = null,
+                        )
+                    }
                 }
             },
             shape = RoundedCornerShape(parentTextFieldCornerRadius),
@@ -147,13 +167,14 @@ fun <T> SearchableExpandedDropDownMenu(
             interactionSource = remember { MutableInteractionSource() }
                 .also { interactionSource ->
                     LaunchedEffect(interactionSource) {
+                        keyboardController?.show()
                         interactionSource.interactions.collect {
                             if (it is PressInteraction.Release) {
                                 expanded = !expanded
                             }
                         }
                     }
-                }
+                },
         )
         if (expanded) {
             DropdownMenu(
@@ -161,10 +182,10 @@ fun <T> SearchableExpandedDropDownMenu(
                     .fillMaxWidth(0.75f)
                     .requiredSizeIn(maxHeight = maxHeight),
                 expanded = expanded,
-                onDismissRequest = { expanded = false }
+                onDismissRequest = { expanded = false },
             ) {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
                     OutlinedTextField(
                         modifier = modifier
@@ -176,7 +197,7 @@ fun <T> SearchableExpandedDropDownMenu(
                             filteredItems = listOfItems.filter {
                                 it.toString().contains(
                                     searchedOption,
-                                    ignoreCase = true
+                                    ignoreCase = true,
                                 )
                             }.toMutableList()
                         },
@@ -185,7 +206,7 @@ fun <T> SearchableExpandedDropDownMenu(
                         },
                         placeholder = {
                             Text(text = "Search")
-                        }
+                        },
                     )
 
                     val items = if (filteredItems.isEmpty()) {
@@ -197,6 +218,7 @@ fun <T> SearchableExpandedDropDownMenu(
                     items.forEach { selectedItem ->
                         DropdownMenuItem(
                             onClick = {
+                                keyboardController?.hide()
                                 selectedOptionText = selectedItem.toString()
                                 onDropDownItemSelected(selectedItem)
                                 searchedOption = ""
@@ -205,7 +227,7 @@ fun <T> SearchableExpandedDropDownMenu(
                             text = {
                                 dropdownItem(selectedItem)
                             },
-                            colors = MenuDefaults.itemColors()
+                            colors = MenuDefaults.itemColors(),
                         )
                     }
                 }
