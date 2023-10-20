@@ -153,7 +153,6 @@ fun <T> SearchableExpandedDropDownMenu(
                     },
                 ) {
                     if (expanded) {
-                        focusRequester.requestFocus()
                         Icon(
                             imageVector = openedIcon,
                             contentDescription = null,
