@@ -15,7 +15,6 @@
  */
 package com.kanyidev.searchable_dropdown
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
@@ -52,7 +51,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 
 /**
@@ -76,7 +74,7 @@ import kotlinx.coroutines.flow.collect
  * @param onSearchTextFieldClicked use this if you are having problems with the keyboard showing, use this to show keyboard on your side
  */
 
-@OptIn(ExperimentalComposeUiApi::class, InternalCoroutinesApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun <T> SearchableExpandedDropDownMenu(
     modifier: Modifier = Modifier,
@@ -192,10 +190,7 @@ fun <T> SearchableExpandedDropDownMenu(
                     OutlinedTextField(
                         modifier = modifier
                             .fillMaxWidth()
-                            .padding(16.dp)
-                            .clickable {
-                                onSearchTextFieldClicked()
-                            },
+                            .padding(16.dp),
                         value = searchedOption,
                         onValueChange = { selectedSport ->
                             searchedOption = selectedSport
@@ -212,6 +207,17 @@ fun <T> SearchableExpandedDropDownMenu(
                         placeholder = {
                             Text(text = "Search")
                         },
+                        interactionSource = remember { MutableInteractionSource() }
+                            .also { interactionSource ->
+                                LaunchedEffect(interactionSource) {
+                                    keyboardController?.show()
+                                    interactionSource.interactions.collect {
+                                        if (it is PressInteraction.Release) {
+                                            onSearchTextFieldClicked()
+                                        }
+                                    }
+                                }
+                            },
                     )
 
                     val items = if (filteredItems.isEmpty()) {
