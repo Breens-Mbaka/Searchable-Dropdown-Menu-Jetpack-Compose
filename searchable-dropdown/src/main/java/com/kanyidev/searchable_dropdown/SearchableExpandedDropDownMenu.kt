@@ -46,6 +46,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -99,6 +101,7 @@ fun <T> SearchableExpandedDropDownMenu(
     var expanded by remember { mutableStateOf(false) }
     var filteredItems = mutableListOf<T>()
     val keyboardController = LocalSoftwareKeyboardController.current
+    val focusRequester = remember { FocusRequester() }
     val itemHeights = remember { mutableStateMapOf<Int, Int>() }
     val baseHeight = 530.dp
     val density = LocalDensity.current
@@ -150,6 +153,7 @@ fun <T> SearchableExpandedDropDownMenu(
                     },
                 ) {
                     if (expanded) {
+                        focusRequester.requestFocus()
                         Icon(
                             imageVector = openedIcon,
                             contentDescription = null,
@@ -190,7 +194,8 @@ fun <T> SearchableExpandedDropDownMenu(
                     OutlinedTextField(
                         modifier = modifier
                             .fillMaxWidth()
-                            .padding(16.dp),
+                            .padding(16.dp)
+                            .focusRequester(focusRequester),
                         value = searchedOption,
                         onValueChange = { selectedSport ->
                             searchedOption = selectedSport
@@ -210,7 +215,7 @@ fun <T> SearchableExpandedDropDownMenu(
                         interactionSource = remember { MutableInteractionSource() }
                             .also { interactionSource ->
                                 LaunchedEffect(interactionSource) {
-                                    keyboardController?.show()
+                                    focusRequester.requestFocus()
                                     interactionSource.interactions.collect {
                                         if (it is PressInteraction.Release) {
                                             onSearchTextFieldClicked()
