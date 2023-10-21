@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'com.breens.searchableexposeddropdownmenujetpackcompose'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.breens.searchableexposeddropdownmenujetpackcompose"
         minSdk 21
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -37,7 +37,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.2.0'
+        kotlinCompilerExtensionVersion '1.5.1'
     }
     packagingOptions {
         resources {
