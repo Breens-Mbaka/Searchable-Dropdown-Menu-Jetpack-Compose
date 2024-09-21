@@ -211,6 +211,7 @@ fun <T> SearchableExpandedDropDownMenu(
                         placeholder = {
                             Text(text = "Search")
                         },
+                        maxLines = 1,
                         interactionSource = remember { MutableInteractionSource() }
                             .also { interactionSource ->
                                 LaunchedEffect(interactionSource) {
