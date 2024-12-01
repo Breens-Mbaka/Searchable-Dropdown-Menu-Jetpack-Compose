@@ -73,6 +73,7 @@ import kotlinx.coroutines.flow.collect
  * @param showDefaultSelectedItem If set to true it will show the default selected item with the position of your preference, it's value is set to false by default
  * @param defaultItemIndex Pass the index of the item to be selected by default from the dropdown list. If you don't provide any the first item in the dropdown will be selected
  * @param defaultItem Returns the item selected by default from the dropdown list
+ * @param selectedDisplayText Returns the selected item and allow mapping it to a custom display text. If no mapping provided, item.toString() will be used by default
  * @param onSearchTextFieldClicked use this if you are having problems with the keyboard showing, use this to show keyboard on your side
  */
 
@@ -94,7 +95,8 @@ fun <T> SearchableExpandedDropDownMenu(
     showDefaultSelectedItem: Boolean = false,
     defaultItemIndex: Int = 0,
     defaultItem: (T) -> Unit,
-    onSearchTextFieldClicked: () -> Unit,
+    selectedDisplayText: ((T) -> String)? = null,
+    onSearchTextFieldClicked: () -> Unit
 ) {
     var selectedOptionText by rememberSaveable { mutableStateOf("") }
     var searchedOption by rememberSaveable { mutableStateOf("") }
@@ -234,7 +236,8 @@ fun <T> SearchableExpandedDropDownMenu(
                         DropdownMenuItem(
                             onClick = {
                                 keyboardController?.hide()
-                                selectedOptionText = selectedItem.toString()
+                                selectedOptionText = selectedDisplayText?.invoke(selectedItem)
+                                    ?: selectedItem.toString()
                                 onDropDownItemSelected(selectedItem)
                                 searchedOption = ""
                                 expanded = false
