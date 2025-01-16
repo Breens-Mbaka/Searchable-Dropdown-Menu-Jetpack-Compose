@@ -54,6 +54,7 @@ colors = // Customize the colors of the input text, background and content used 
 dropdownItem = { name -> // Provide a Composable that will be used to populate the dropdown and that takes a type i.e String,Int or even a custom type
       Text(name)
    },
+selectedDisplayText = {} // Optional: Returns the selected item and allow mapping it to a custom display text. If no mapping provided, item.toString() will be used by default   
 )
 ```
 
