@@ -34,10 +34,6 @@ dependencies {
 }
 ```
 
-### :warning: NOTE: 
-- To use the current version of the library please make sure you add material 3 dependency in your app level module. This will be fixed in the next update.
-- Alternatively, you can use a previous version of the library so as to avoid this workaround.
-
 ### Usage
 
 ``` Kotlin
