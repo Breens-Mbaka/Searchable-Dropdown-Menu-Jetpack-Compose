@@ -11,9 +11,7 @@
  <a href="https://jitpack.io/#Breens-Mbaka/Searchable-Dropdown-Menu-Jetpack-Compose"><img alt="Build Status" src="https://jitpack.io/v/Breens-Mbaka/Searchable-Dropdown-Menu-Jetpack-Compose.svg"/></a> 
 </p> <br>
 
-<p align="center">
 https://github.com/user-attachments/assets/9ecde338-5b81-401d-a415-86bdfff080b3
-</p>
 
 ## How to include it into your project
 
