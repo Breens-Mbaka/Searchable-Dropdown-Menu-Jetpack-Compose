@@ -22,19 +22,20 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSizeIn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.IconToggleButton
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextFieldColors
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -46,14 +47,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.flow.collect
 
 /**
  * 🚀 A Jetpack Compose Android Library to create a dropdown menu that is searchable.
@@ -61,13 +63,10 @@ import kotlinx.coroutines.flow.collect
  * @param listOfItems A list of objects that you want to display as a dropdown
  * @param enable controls the enabled state of the OutlinedTextField. When false, the text field will be neither editable nor focusable, the input of the text field will not be selectable, visually text field will appear in the disabled UI state
  * @param placeholder the optional placeholder to be displayed when the text field is in focus and
- * the input text is empty. The default text style for internal [Text] is [Typography.subtitle1]
  * @param openedIcon the Icon displayed when the dropdown is opened. Default Icon is [Icons.Outlined.KeyboardArrowUp]
  * @param closedIcon Icon displayed when the dropdown is closed. Default Icon is [Icons.Outlined.KeyboardArrowDown]
- * @param parentTextFieldCornerRadius : Defines the radius of the enclosing OutlinedTextField. Default Radius is 12.dp
  * @param colors [TextFieldColors] that will be used to resolve color of the text and content
  * (including label, placeholder, leading and trailing icons, border) for this text field in
- * different states. See [TextFieldDefaults.outlinedTextFieldColors]
  * @param onDropDownItemSelected Returns the item that was selected from the dropdown
  * @param dropdownItem Provide a composable that will be used to populate the dropdown and that takes a type i.e String,Int or even a custom type
  * @param showDefaultSelectedItem If set to true it will show the default selected item with the position of your preference, it's value is set to false by default
@@ -76,34 +75,50 @@ import kotlinx.coroutines.flow.collect
  * @param selectedDisplayText Returns the selected item and allow mapping it to a custom display text. If no mapping provided, item.toString() will be used by default
  * @param onSearchTextFieldClicked use this if you are having problems with the keyboard showing, use this to show keyboard on your side
  */
-
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun <T> SearchableExpandedDropDownMenu(
+fun <T> SearchableExpandedDropDownMenuMaterial3(
     modifier: Modifier = Modifier,
+    fieldLabel: String = "",
     listOfItems: List<T>,
     enable: Boolean = true,
     readOnly: Boolean = true,
-    placeholder: @Composable (() -> Unit) = { Text(text = "Select Option") },
+    placeholder: @Composable (() -> Unit) = {
+        Text(
+            text = "Select Option",
+            style = MaterialTheme.typography.bodySmall.copy(
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f),
+            ),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+    },
     openedIcon: ImageVector = Icons.Outlined.KeyboardArrowUp,
     closedIcon: ImageVector = Icons.Outlined.KeyboardArrowDown,
-    parentTextFieldCornerRadius: Dp = 12.dp,
-    colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors(),
+    colors: TextFieldColors = TextFieldDefaults.colors(
+        focusedContainerColor = MaterialTheme.colorScheme.background,
+        unfocusedContainerColor = MaterialTheme.colorScheme.background,
+        unfocusedIndicatorColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
+        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+        disabledContainerColor = MaterialTheme.colorScheme.background,
+        errorContainerColor = MaterialTheme.colorScheme.background,
+    ),
     onDropDownItemSelected: (T) -> Unit = {},
     dropdownItem: @Composable (T) -> Unit,
     isError: Boolean = false,
     showDefaultSelectedItem: Boolean = false,
     defaultItemIndex: Int = 0,
-    defaultItem: (T) -> Unit,
+    defaultItem: (T) -> Unit = {},
     selectedDisplayText: ((T) -> String)? = null,
-    onSearchTextFieldClicked: () -> Unit
+    reset: Boolean = false,
+    parentTextFieldShape: CornerBasedShape = MaterialTheme.shapes.medium,
+    textStyle: TextStyle = MaterialTheme.typography.bodySmall,
 ) {
     var selectedOptionText by rememberSaveable { mutableStateOf("") }
     var searchedOption by rememberSaveable { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
     var filteredItems = mutableListOf<T>()
     val keyboardController = LocalSoftwareKeyboardController.current
-    val focusRequester = remember { FocusRequester() }
     val itemHeights = remember { mutableStateMapOf<Int, Int>() }
     val baseHeight = 530.dp
     val density = LocalDensity.current
@@ -114,6 +129,10 @@ fun <T> SearchableExpandedDropDownMenu(
         defaultItem(
             listOfItems[defaultItemIndex],
         )
+    }
+
+    if (reset) {
+        selectedOptionText = ""
     }
 
     val maxHeight = remember(itemHeights.toMap()) {
@@ -136,19 +155,24 @@ fun <T> SearchableExpandedDropDownMenu(
     }
 
     Column(
-        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         OutlinedTextField(
-            modifier = modifier,
+            modifier = modifier
+                .semantics { testTag = fieldLabel; testTagsAsResourceId = true },
             colors = colors,
             value = selectedOptionText,
             readOnly = readOnly,
             enabled = enable,
             onValueChange = { selectedOptionText = it },
             placeholder = placeholder,
+            textStyle = textStyle,
             trailingIcon = {
                 IconToggleButton(
+                    modifier = Modifier
+                        .semantics {
+                            testTag = "dropDownIcon"; testTagsAsResourceId = true
+                        },
                     checked = expanded,
                     onCheckedChange = {
                         expanded = it
@@ -167,7 +191,7 @@ fun <T> SearchableExpandedDropDownMenu(
                     }
                 }
             },
-            shape = RoundedCornerShape(parentTextFieldCornerRadius),
+            shape = parentTextFieldShape,
             isError = isError,
             interactionSource = remember { MutableInteractionSource() }
                 .also { interactionSource ->
@@ -190,13 +214,14 @@ fun <T> SearchableExpandedDropDownMenu(
                 onDismissRequest = { expanded = false },
             ) {
                 Column(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
                     OutlinedTextField(
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                            .focusRequester(focusRequester),
+                        modifier = Modifier
+                            .fillMaxWidth(),
                         value = searchedOption,
                         onValueChange = { selectedSport ->
                             searchedOption = selectedSport
@@ -207,23 +232,16 @@ fun <T> SearchableExpandedDropDownMenu(
                                 )
                             }.toMutableList()
                         },
+                        textStyle = textStyle,
                         leadingIcon = {
                             Icon(imageVector = Icons.Outlined.Search, contentDescription = null)
                         },
                         placeholder = {
-                            Text(text = "Search")
+                            Text(
+                                text = "Search",
+                                style = MaterialTheme.typography.labelSmall,
+                            )
                         },
-                        interactionSource = remember { MutableInteractionSource() }
-                            .also { interactionSource ->
-                                LaunchedEffect(interactionSource) {
-                                    focusRequester.requestFocus()
-                                    interactionSource.interactions.collect {
-                                        if (it is PressInteraction.Release) {
-                                            onSearchTextFieldClicked()
-                                        }
-                                    }
-                                }
-                            },
                     )
 
                     val items = if (filteredItems.isEmpty()) {
@@ -234,6 +252,8 @@ fun <T> SearchableExpandedDropDownMenu(
 
                     items.forEach { selectedItem ->
                         DropdownMenuItem(
+                            modifier = Modifier
+                                .fillMaxWidth(),
                             onClick = {
                                 keyboardController?.hide()
                                 selectedOptionText = selectedDisplayText?.invoke(selectedItem)
@@ -242,7 +262,7 @@ fun <T> SearchableExpandedDropDownMenu(
                                 searchedOption = ""
                                 expanded = false
                             },
-                            content = {
+                            text = {
                                 dropdownItem(selectedItem)
                             },
                         )
