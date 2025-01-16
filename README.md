@@ -12,7 +12,7 @@
 </p> <br>
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/72180010/202379794-eda0b27c-6df7-4544-80f4-d34c8e5c0eb9.gif" width="280"/>
+https://github.com/user-attachments/assets/9ecde338-5b81-401d-a415-86bdfff080b3
 </p>
 
 ## How to include it into your project
@@ -32,7 +32,7 @@ allprojects {
 
 ```gradle
 dependencies {
-    implementation 'com.github.Breens-Mbaka:Searchable-Dropdown-Menu-Jetpack-Compose:0.2.8'
+    implementation 'com.github.Breens-Mbaka:Searchable-Dropdown-Menu-Jetpack-Compose:1.0.0'
 }
 ```
 
@@ -62,6 +62,38 @@ dropdownItem = { name -> // Provide a Composable that will be used to populate t
    },
 )
 ```
+
+``` Kotlin
+LargeSearchableDropdownMenu(
+    // List of options to display in the dropdown menu
+    options = listOf("Option 1", "Option 2"),
+
+    // Currently selected option; null means no option is selected initially
+    selectedOption = null,
+
+    // Lambda function to handle when an item is selected
+    // The selected item is passed as a parameter to this function
+    onItemSelected = { selected -> 
+        println("Selected: $selected") // Replace with your desired action
+    },
+
+    // Placeholder text shown when no item is selected
+    placeholder = "Select an option",
+
+    // Title displayed at the top of the dropdown menu
+    title = "Dropdown Title",
+
+    // Custom drawing of dropdown items
+    // Each item can have its own appearance and behavior
+    drawItem = { item, _, _, onClick ->
+        // Define how each dropdown item looks and behaves
+        DropdownMenuItem(onClick = onClick) {
+            Text(item.toString()) // Display the item's string representation
+        }
+    }
+)
+```
+
 
 ### Who's using Searchable-Dropdown-Menu-Jetpack-Compose?
 If your project uses Searchable-Dropdown-Menu-Jetpack-Compose, please let me know by creating a new issue! 😊
