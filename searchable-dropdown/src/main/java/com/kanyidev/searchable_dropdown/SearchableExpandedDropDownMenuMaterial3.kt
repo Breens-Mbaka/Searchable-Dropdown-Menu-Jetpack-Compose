@@ -72,6 +72,7 @@ import androidx.compose.ui.unit.dp
  * @param showDefaultSelectedItem If set to true it will show the default selected item with the position of your preference, it's value is set to false by default
  * @param defaultItemIndex Pass the index of the item to be selected by default from the dropdown list. If you don't provide any the first item in the dropdown will be selected
  * @param defaultItem Returns the item selected by default from the dropdown list
+ * @param selectedDisplayText Returns the selected item and allow mapping it to a custom display text. If no mapping provided, item.toString() will be used by default
  */
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -107,6 +108,7 @@ fun <T> SearchableExpandedDropDownMenuMaterial3(
     showDefaultSelectedItem: Boolean = false,
     defaultItemIndex: Int = 0,
     defaultItem: (T) -> Unit = {},
+    selectedDisplayText: ((T) -> String)? = null,
     reset: Boolean = false,
     parentTextFieldShape: CornerBasedShape = MaterialTheme.shapes.medium,
     textStyle: TextStyle = MaterialTheme.typography.bodySmall,
@@ -253,7 +255,8 @@ fun <T> SearchableExpandedDropDownMenuMaterial3(
                                 .fillMaxWidth(),
                             onClick = {
                                 keyboardController?.hide()
-                                selectedOptionText = selectedItem.toString()
+                                selectedOptionText = selectedDisplayText?.invoke(selectedItem)
+                                    ?: selectedItem.toString()
                                 onDropDownItemSelected(selectedItem)
                                 searchedOption = ""
                                 expanded = false
