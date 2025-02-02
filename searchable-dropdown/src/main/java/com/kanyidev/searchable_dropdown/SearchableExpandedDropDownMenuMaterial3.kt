@@ -48,6 +48,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.semantics.semantics
@@ -115,12 +116,14 @@ fun <T> SearchableExpandedDropDownMenuMaterial3(
 ) {
     var selectedOptionText by rememberSaveable { mutableStateOf("") }
     var searchedOption by rememberSaveable { mutableStateOf("") }
-    var expanded by remember { mutableStateOf(false) }
+    var expanded by rememberSaveable { mutableStateOf(false) }
     var filteredItems = mutableListOf<T>()
     val keyboardController = LocalSoftwareKeyboardController.current
     val itemHeights = remember { mutableStateMapOf<Int, Int>() }
     val baseHeight = 530.dp
     val density = LocalDensity.current
+    val configuration = LocalConfiguration.current
+
 
     if (showDefaultSelectedItem) {
         selectedOptionText = selectedOptionText.ifEmpty { listOfItems[defaultItemIndex].toString() }
@@ -137,7 +140,11 @@ fun <T> SearchableExpandedDropDownMenuMaterial3(
     val maxHeight = remember(itemHeights.toMap()) {
         if (itemHeights.keys.toSet() != listOfItems.indices.toSet()) {
             // if we don't have all heights calculated yet, return default value
-            return@remember baseHeight
+
+            val screenHeight = configuration.screenHeightDp.dp
+            return@remember if(screenHeight < baseHeight) {
+                screenHeight
+            } else baseHeight
         }
         val baseHeightInt = with(density) { baseHeight.toPx().toInt() }
 
